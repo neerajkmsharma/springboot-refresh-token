@@ -29,7 +29,13 @@ public class SecurityConfig {
 
   private static final String SWAGGER_UI = "/swagger-ui/**";
 
+  private static final String SWAGGER_API_DOC = "/v3/api-docs/**";
+
   private static final String CUSTOMER_REWARD_PROGRAM_V1 = "/customer-reward-program/api/v1/**";
+
+  private static final String AUTH_TOKEN = "/authorization/auth-token";
+
+  private static final String REFRESH_TOKEN = "/authorization/refreshToken";
 
   @Bean
   UserDetailsService userDetailsService() {
@@ -41,14 +47,14 @@ public class SecurityConfig {
     throws Exception {
 
     httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers(antMatcher(H2_CONSOLE), antMatcher(SWAGGER_UI),
-      antMatcher("/products/signUp"), antMatcher("/products/login"), antMatcher("/products/refreshToken")));
+      antMatcher(SWAGGER_API_DOC), antMatcher("/products/signUp"), antMatcher(AUTH_TOKEN), antMatcher(REFRESH_TOKEN)));
 
     httpSecurity.headers(headers -> headers.frameOptions()
       .disable());
 
     httpSecurity.authorizeHttpRequests(auth -> auth
-      .requestMatchers(antMatcher(H2_CONSOLE), antMatcher(SWAGGER_UI), antMatcher("/products/signUp"),
-        antMatcher("/products/login"), antMatcher("/products/refreshToken"))
+      .requestMatchers(antMatcher(H2_CONSOLE), antMatcher(SWAGGER_UI), antMatcher(SWAGGER_API_DOC),
+        antMatcher("/products/signUp"), antMatcher(AUTH_TOKEN), antMatcher(REFRESH_TOKEN))
       .permitAll());
 
     httpSecurity.authorizeHttpRequests(

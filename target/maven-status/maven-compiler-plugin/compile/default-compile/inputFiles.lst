@@ -12,6 +12,7 @@
 /Users/neerajkumarsharma/dev/springboot-refresh-token/src/main/java/com/avinya/application/model/RefreshTokenRequest.java
 /Users/neerajkumarsharma/dev/springboot-refresh-token/src/main/java/com/avinya/application/repository/CustomerDetailRepository.java
 /Users/neerajkumarsharma/dev/springboot-refresh-token/src/main/java/com/avinya/application/model/Product.java
+/Users/neerajkumarsharma/dev/springboot-refresh-token/src/main/java/com/avinya/application/controller/TokenAuthorizationController.java
 /Users/neerajkumarsharma/dev/springboot-refresh-token/src/main/java/com/avinya/application/config/SecurityConfig.java
 /Users/neerajkumarsharma/dev/springboot-refresh-token/src/main/java/com/avinya/application/config/UserInfoUserDetailsService.java
 /Users/neerajkumarsharma/dev/springboot-refresh-token/src/main/java/com/avinya/application/model/CustomerMonthlyTransaction.java

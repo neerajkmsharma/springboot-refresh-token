@@ -23,6 +23,7 @@ com/avinya/application/config/UserInfoUserDetails.class
 com/avinya/application/model/JwtResponse.class
 com/avinya/application/exception/CustomerNotFoundException.class
 com/avinya/application/service/RefreshTokenService.class
+com/avinya/application/controller/TokenAuthorizationController.class
 com/avinya/application/model/ExceptionResponse.class
 com/avinya/application/config/SwaggerConfiguration.class
 com/avinya/application/model/RefreshTokenRequest.class
