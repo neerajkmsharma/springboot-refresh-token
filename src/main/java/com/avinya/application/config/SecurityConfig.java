@@ -1,5 +1,6 @@
 package com.avinya.application.config;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +37,10 @@ public class SecurityConfig {
 
   private static final String REFRESH_TOKEN = "/authorization/refreshToken";
 
+  private static final String USER_SIGNUP = "/authorization/signUp";
+
+  private static final String PRODUCTS = "/products/**";
+
   @Bean
   UserDetailsService userDetailsService() {
     return new UserInfoUserDetailsService();
@@ -47,21 +51,21 @@ public class SecurityConfig {
     throws Exception {
 
     httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers(antMatcher(H2_CONSOLE), antMatcher(SWAGGER_UI),
-      antMatcher(SWAGGER_API_DOC), antMatcher("/products/signUp"), antMatcher(AUTH_TOKEN), antMatcher(REFRESH_TOKEN)));
+      antMatcher(SWAGGER_API_DOC), antMatcher(USER_SIGNUP), antMatcher(AUTH_TOKEN), antMatcher(REFRESH_TOKEN)));
 
     httpSecurity.headers(headers -> headers.frameOptions()
       .disable());
 
     httpSecurity.authorizeHttpRequests(auth -> auth
       .requestMatchers(antMatcher(H2_CONSOLE), antMatcher(SWAGGER_UI), antMatcher(SWAGGER_API_DOC),
-        antMatcher("/products/signUp"), antMatcher(AUTH_TOKEN), antMatcher(REFRESH_TOKEN))
+        antMatcher(USER_SIGNUP), antMatcher(AUTH_TOKEN), antMatcher(REFRESH_TOKEN))
       .permitAll());
 
-    httpSecurity.authorizeHttpRequests(
-      auth -> auth.requestMatchers(antMatcher("/products/**"), antMatcher(CUSTOMER_REWARD_PROGRAM_V1))
+    httpSecurity
+      .authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher(PRODUCTS), antMatcher(CUSTOMER_REWARD_PROGRAM_V1))
         .authenticated());
 
-    httpSecurity.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    httpSecurity.sessionManagement(sess -> sess.sessionCreationPolicy(STATELESS))
       .authenticationProvider(authenticationProvider())
       .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 

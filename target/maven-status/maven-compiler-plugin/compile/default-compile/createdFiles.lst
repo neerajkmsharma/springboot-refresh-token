@@ -14,8 +14,10 @@ com/avinya/application/model/CustomerRewardDetail.class
 com/avinya/application/service/CustomerRewardService.class
 com/avinya/application/exception/CustomerRewardProgramException.class
 com/avinya/application/util/CustomerRewardProgramConstant.class
+com/avinya/application/service/UserInfoServiceImpl.class
 com/avinya/application/model/Product.class
 com/avinya/application/repository/UserInfoRepository.class
+com/avinya/application/service/UserInfoService.class
 com/avinya/application/repository/TransactionDetailRepository.class
 com/avinya/application/config/UserInfoUserDetailsService.class
 com/avinya/application/entity/UserInfo.class

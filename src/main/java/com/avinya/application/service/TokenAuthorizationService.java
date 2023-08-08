@@ -33,18 +33,6 @@ public class TokenAuthorizationService {
     return claimsResolver.apply(claims);
   }
 
-  private Claims extractAllClaims(final String token) {
-    return Jwts.parserBuilder()
-      .setSigningKey(getSignKey())
-      .build()
-      .parseClaimsJws(token)
-      .getBody();
-  }
-
-  private Boolean isTokenExpired(final String token) {
-    return extractExpiration(token).before(new Date());
-  }
-
   public boolean validateToken(final String token, final UserDetails userDetails) {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
@@ -53,6 +41,18 @@ public class TokenAuthorizationService {
   public String generateToken(final String userName) {
     final Map<String, Object> claims = new HashMap<>();
     return createToken(claims, userName);
+  }
+
+  private Boolean isTokenExpired(final String token) {
+    return extractExpiration(token).before(new Date());
+  }
+
+  private Claims extractAllClaims(final String token) {
+    return Jwts.parserBuilder()
+      .setSigningKey(getSignKey())
+      .build()
+      .parseClaimsJws(token)
+      .getBody();
   }
 
   private String createToken(final Map<String, Object> claims, final String userName) {

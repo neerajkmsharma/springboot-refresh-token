@@ -18,12 +18,12 @@ public class SwaggerConfiguration {
   OpenAPI openAPI() {
     return new OpenAPI().addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
       .components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
-      .info(new Info().title("Customer Reward Program API")
-        .description("Customer Reward Program API")
+      .info(new Info().title("Customer Reward Program with Refresh token API")
+        .description("Customer Reward Program with Refresh token API")
         .version("1.0")
         .contact(new Contact().name("Neeraj Kumar Sharma")
-          .email("www.baeldung.com")
-          .url("neerajkmsharma@gmail.com"))
+          .email("neerajkmsharma@gmail.com")
+          .url("https://www.linkedin.com/in/neerajkmsharma"))
         .license(new License().name("License of API")
           .url("API license URL")));
   }

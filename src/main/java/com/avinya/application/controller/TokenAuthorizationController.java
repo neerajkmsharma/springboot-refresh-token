@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avinya.application.entity.RefreshToken;
+import com.avinya.application.entity.UserInfo;
 import com.avinya.application.model.AuthRequest;
 import com.avinya.application.model.JwtResponse;
 import com.avinya.application.model.RefreshTokenRequest;
 import com.avinya.application.service.RefreshTokenService;
 import com.avinya.application.service.TokenAuthorizationService;
+import com.avinya.application.service.UserInfoService;
 
 @RestController
 @RequestMapping("/authorization")
@@ -28,7 +30,15 @@ public class TokenAuthorizationController {
   private AuthenticationManager authenticationManager;
 
   @Autowired
+  private UserInfoService userInfoService;
+
+  @Autowired
   private RefreshTokenService refreshTokenService;
+
+  @PostMapping("/signUp")
+  public String addNewUser(@RequestBody final UserInfo userInfo) {
+    return userInfoService.addUser(userInfo);
+  }
 
   @PostMapping("/auth-token")
   public JwtResponse authenticateAndGetToken(@RequestBody final AuthRequest authRequest) {
