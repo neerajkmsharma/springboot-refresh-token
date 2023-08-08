@@ -13,13 +13,15 @@ import com.avinya.application.entity.UserInfo;
 
 public class UserInfoUserDetails implements UserDetails {
 
-  private String name;
+  private static final long serialVersionUID = 1L;
 
-  private String password;
+  private final String name;
 
-  private List<GrantedAuthority> authorities;
+  private final String password;
 
-  public UserInfoUserDetails(UserInfo userInfo) {
+  private final List<GrantedAuthority> authorities;
+
+  public UserInfoUserDetails(final UserInfo userInfo) {
     name = userInfo.getName();
     password = userInfo.getPassword();
     authorities = Arrays.stream(userInfo.getRoles()

@@ -20,8 +20,8 @@ public class RefreshTokenService {
   @Autowired
   private UserInfoRepository userInfoRepository;
 
-  public RefreshToken createRefreshToken(String username) {
-    RefreshToken refreshToken = RefreshToken.builder()
+  public RefreshToken createRefreshToken(final String username) {
+    final RefreshToken refreshToken = RefreshToken.builder()
       .userInfo(userInfoRepository.findByName(username)
         .get())
       .token(UUID.randomUUID()
@@ -32,11 +32,11 @@ public class RefreshTokenService {
     return refreshTokenRepository.save(refreshToken);
   }
 
-  public Optional<RefreshToken> findByToken(String token) {
+  public Optional<RefreshToken> findByToken(final String token) {
     return refreshTokenRepository.findByToken(token);
   }
 
-  public RefreshToken verifyExpiration(RefreshToken token) {
+  public RefreshToken verifyExpiration(final RefreshToken token) {
     if (token.getExpiryDate()
       .compareTo(Instant.now()) < 0) {
       refreshTokenRepository.delete(token);

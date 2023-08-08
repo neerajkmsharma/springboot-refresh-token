@@ -21,7 +21,7 @@ import com.avinya.application.model.AuthRequest;
 import com.avinya.application.model.JwtResponse;
 import com.avinya.application.model.Product;
 import com.avinya.application.model.RefreshTokenRequest;
-import com.avinya.application.service.JwtService;
+import com.avinya.application.service.TokenAuthorizationService;
 import com.avinya.application.service.ProductService;
 import com.avinya.application.service.RefreshTokenService;
 
@@ -33,7 +33,7 @@ public class ProductController {
   private ProductService service;
 
   @Autowired
-  private JwtService jwtService;
+  private TokenAuthorizationService jwtService;
 
   @Autowired
   private RefreshTokenService refreshTokenService;
@@ -42,7 +42,7 @@ public class ProductController {
   private AuthenticationManager authenticationManager;
 
   @PostMapping("/signUp")
-  public String addNewUser(@RequestBody UserInfo userInfo) {
+  public String addNewUser(@RequestBody final UserInfo userInfo) {
     return service.addUser(userInfo);
   }
 
@@ -54,20 +54,17 @@ public class ProductController {
 
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('ROLE_USER')")
-  public Product getProductById(@PathVariable int id) {
+  public Product getProductById(@PathVariable final int id) {
     return service.getProduct(id);
   }
 
   @PostMapping("/login")
-  public JwtResponse authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-    Authentication authentication = authenticationManager
-      .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+  public JwtResponse authenticateAndGetToken(@RequestBody final AuthRequest authRequest) {
+    final Authentication authentication = authenticationManager
+      .authenticate(new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password()));
     if (authentication.isAuthenticated()) {
-      RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequest.getUsername());
-      return JwtResponse.builder()
-        .accessToken(jwtService.generateToken(authRequest.getUsername()))
-        .token(refreshToken.getToken())
-        .build();
+      final RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequest.username());
+      return new JwtResponse(jwtService.generateToken(authRequest.username()), refreshToken.getToken());
     }
     else {
       throw new UsernameNotFoundException("invalid user request !");
@@ -75,16 +72,13 @@ public class ProductController {
   }
 
   @PostMapping("/refreshToken")
-  public JwtResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-    return refreshTokenService.findByToken(refreshTokenRequest.getToken())
+  public JwtResponse refreshToken(@RequestBody final RefreshTokenRequest refreshTokenRequest) {
+    return refreshTokenService.findByToken(refreshTokenRequest.token())
       .map(refreshTokenService::verifyExpiration)
       .map(RefreshToken::getUserInfo)
       .map(userInfo -> {
-        String accessToken = jwtService.generateToken(userInfo.getName());
-        return JwtResponse.builder()
-          .accessToken(accessToken)
-          .token(refreshTokenRequest.getToken())
-          .build();
+        final String accessToken = jwtService.generateToken(userInfo.getName());
+        return new JwtResponse(accessToken, refreshTokenRequest.token());
       })
       .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
   }
