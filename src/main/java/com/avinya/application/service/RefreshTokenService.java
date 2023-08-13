@@ -1,6 +1,7 @@
 package com.avinya.application.service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class RefreshTokenService {
       .token(UUID.randomUUID()
         .toString())
       .expiryDate(Instant.now()
-        .plusMillis(600000))// 10
+        .plus(2, ChronoUnit.MINUTES))
       .build();
     return refreshTokenRepository.save(refreshToken);
   }
